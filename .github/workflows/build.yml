@@ -1,22 +1,11 @@
 name: Build Mod
 on: [push, workflow_dispatch]
-
 jobs:
   build:
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-        - name: Android
-          id: android
-    name: ${{ matrix.config.name }}
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-
-      - name: Build Mod
+      - name: Build
         uses: geode-sdk/build-geode-mod@main
         with:
-          platform: ${{ matrix.config.id }}
-          
+          platform: android
