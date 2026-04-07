@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21)
 
-project(TestGDMod)
+project(MyTestMod)
 
 # Buscamos el SDK de Geode
 find_package(Geode REQUIRED)
