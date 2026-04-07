@@ -8,5 +8,10 @@
 	"name": "Test",
 	"version": "1.0.0",
 	"developer": "le10x",
-	"description": "Prueba de compilacion"
+	"description": "Boton de Hello World",
+	"resources": {
+		"sprites": [
+			"my_button.png"
+		]
+	}
 }
