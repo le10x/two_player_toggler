@@ -20,13 +20,15 @@ jobs:
     runs-on: ${{ matrix.config.os }}
 
     steps:
-      - checkout:
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Build Mod
         uses: geode-sdk/build-geode-mod@main
         with:
+          # El error suele ocurrir por falta de configuración clara aquí
+          target: ${{ matrix.config.target }}
+          # Forzamos la descarga de las librerías necesarias
           bindings: geode-sdk/bindings
           combine: true
-          target: ${{ matrix.config.target }}
           
