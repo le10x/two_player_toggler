@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build Android Mod
+    name: Build Android
     runs-on: ubuntu-latest
 
     steps:
@@ -16,9 +16,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build Mod
-        uses: geode-sdk/build-geode-mod@v2
+        uses: geode-sdk/build-geode-mod@main
         with:
-          # Escribimos Android directamente para evitar el error de '--platform'
           target: Android
+          bindings: geode-sdk/bindings
           combine: true
           
