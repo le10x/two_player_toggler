@@ -19,4 +19,6 @@ jobs:
         uses: geode-sdk/build-geode-mod@main
         with:
           target: Android
+          # Forzamos a que combine las arquitecturas de 32 y 64 bits
+          combine: true
           
