@@ -8,7 +8,7 @@
 	"name": "Test",
 	"version": "1.0.0",
 	"developer": "le10x",
-	"description": "Boton de Hello World",
+	"description": "Test Mod",
 	"resources": {
 		"sprites": [
 			"my_button.png"
