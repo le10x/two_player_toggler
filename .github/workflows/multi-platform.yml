@@ -26,9 +26,7 @@ jobs:
       - name: Build Mod
         uses: geode-sdk/build-geode-mod@main
         with:
-          # El error suele ocurrir por falta de configuración clara aquí
           target: ${{ matrix.config.target }}
-          # Forzamos la descarga de las librerías necesarias
           bindings: geode-sdk/bindings
           combine: true
           
