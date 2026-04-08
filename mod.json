@@ -1,10 +1,10 @@
 {
 	"geode": "v3.0.0-beta.1",
 	"gd": {
-		"win": "2.2081",
+		"win": "2.206",
 		"android": "2.2081"
 	},
-	"id": "user.test-mod",
+	"id": "user.test_mod",
 	"name": "Test Mod",
 	"version": "1.0.0",
 	"developer": "User",
