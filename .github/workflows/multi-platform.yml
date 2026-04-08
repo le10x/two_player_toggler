@@ -1,49 +1,15 @@
-name: Build Geode Mod
-
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
-
 jobs:
   build:
     strategy:
-      fail-fast: false
       matrix:
         config:
-          - name: Android 32-bit
-            target: android32
-          - name: Android 64-bit
-            target: android64
-          - name: Windows
-            target: win
-
-    name: ${{ matrix.config.name }}
-    runs-on: ${{ matrix.config.target == 'win' && 'windows-latest' || 'ubuntu-latest' }}
-
+          - name: Android32
+            target: Android32
+    
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Geode SDK
-        uses: geode-sdk/setup-geode@v3
-        with:
-          # Esto asegura que usemos la versión de SDK compatible con 2.2081
-          sdk-version: latest
-
-      - name: Update Bindings
-        run: geode sdk update
-        # Esto descarga el parche para el error de xml_node.cpp
-
-      - name: Configure CMake
-        run: >
-          cmake -B build
-          -DCMAKE_BUILD_TYPE=Release
-          -DGEODE_TARGET_PLATFORM=${{ matrix.config.target }}
-          -DGEODE_UNITY_BUILD=OFF
-          -DCMAKE_CXX_STANDARD=20
-
+      - uses: actions/checkout@v4
       - name: Build Mod
-        run: cmake --build build --config Release --parallel 2
-        # --parallel 2 evita el Exit Code 2 por falta de memoria RAM
+        uses: geode-sdk/build-geode-mod@main
+        with:
+          target: ${{ matrix.config.target }}
+          
