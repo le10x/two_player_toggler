@@ -1,21 +1,5 @@
-name: Build Mod
-on: [push, workflow_dispatch]
-
-jobs:
-  build:
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-          - name: Android 32-bit
-            target: android32
-          - name: Android 64-bit
-            target: android64
-    name: ${{ matrix.config.name }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Build Mod
-        uses: geode-sdk/build-geode-mod@main
-        with:
-          target: ${{ matrix.config.target }}
+- name: Build Mod
+  uses: geode-sdk/build-geode-mod@main
+  with:
+    target: ${{ matrix.config.target }}
+    platform: android
