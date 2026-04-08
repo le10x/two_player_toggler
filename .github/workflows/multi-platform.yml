@@ -14,6 +14,7 @@ jobs:
         config:
           - name: Android
             os: ubuntu-latest
+            # Aquí es donde definimos el valor que le falta al comando
             target: Android
 
     name: ${{ matrix.config.name }}
@@ -26,7 +27,7 @@ jobs:
       - name: Build Mod
         uses: geode-sdk/build-geode-mod@main
         with:
+          # Esta línea es la que soluciona tu error '--platform'
           target: ${{ matrix.config.target }}
-          bindings: geode-sdk/bindings
           combine: true
           
