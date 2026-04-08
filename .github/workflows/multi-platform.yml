@@ -1,5 +1,7 @@
-- name: Build Mod
-  uses: geode-sdk/build-geode-mod@main
-  with:
-    target: ${{ matrix.config.target }}
-    platform: android
+- name: Configure CMake
+  run: >
+    cmake -B build
+    -DCMAKE_BUILD_TYPE=Release
+    -DGEODE_UNITY_BUILD=OFF
+    -DCMAKE_CXX_STANDARD=20
+    -DGEODE_TARGET_PLATFORM=android32
