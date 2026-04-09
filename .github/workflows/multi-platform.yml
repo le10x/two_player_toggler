@@ -3,22 +3,17 @@ on: [push, workflow_dispatch]
 
 jobs:
   build:
-    name: Android 32 Build
+    name: Android Build
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      # Nombre oficial de la acción de instalación
-      - name: Setup Geode
-        uses: geode-sdk/setup@v1
-        with:
-          sdk: v5.5.0
-
-      # Nombre oficial de la acción de compilación
       - name: Build Mod
-        uses: geode-sdk/build@v1
+        # Esta es la acción que contiene todo el proceso
+        uses: geode-sdk/build-geode-mod@main
         with:
           target: android32
+          sdk: v5.5.0
           combine: true
           
