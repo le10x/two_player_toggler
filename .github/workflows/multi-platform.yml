@@ -1,15 +1,9 @@
 name: Build Geode Mod
-
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - "**"
+on: [push, workflow_dispatch]
 
 jobs:
   build:
     strategy:
-      fail-fast: false
       matrix:
         config:
           - name: Android32
@@ -26,6 +20,7 @@ jobs:
         uses: geode-sdk/build-geode-mod@main
         with:
           target: ${{ matrix.config.target }}
+          # Al poner la versión aquí, la acción fuerza a CMake a encontrarla
           sdk: v5.5.0
           combine: true
           
