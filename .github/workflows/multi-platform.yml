@@ -1,25 +1,19 @@
 name: Build Geode Mod
-
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
+on: [workflow_dispatch, push]
 
 jobs:
   build:
     name: Build Android
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Build Mod
         uses: geode-sdk/build-geode-mod@main
         with:
+          # Forzamos 'Android' aquí. Si falla, el problema es el mod.json
           target: Android
-          # Forzamos el uso de la versión de desarrollo más reciente
+          # Usamos nightly para soportar versiones nuevas de GD
           sdk: nightly
           combine: true
           
