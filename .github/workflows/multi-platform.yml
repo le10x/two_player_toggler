@@ -3,26 +3,16 @@ on: [push, workflow_dispatch]
 
 jobs:
   build:
-    strategy:
-      matrix:
-        config:
-          - name: Android32
-            os: ubuntu-latest
-            target: Android32
-
-    name: ${{ matrix.config.name }}
-    runs-on: ${{ matrix.config.os }}
+    name: Android Build
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Build Mod
-        uses: geode-sdk/build-geode-mod@main
+        uses: geode-sdk/build-geode-mod@v3
         with:
-          target: ${{ matrix.config.target }}
+          target: android32
           sdk: v5.5.0
           combine: true
-        env:
-          # Esta ruta es donde la Action de Geode suele descargar todo
-          GEODE_SDK: ${{ github.workspace }}/geode
           
