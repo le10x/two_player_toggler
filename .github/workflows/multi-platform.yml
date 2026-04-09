@@ -8,9 +8,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Este paso instala el SDK necesario para encontrar GeodeConfig.cmake
       - name: Setup Geode SDK
-        uses: geode-sdk/setup-geode-sdk@main
+        uses: geode-sdk/setup-sdk@main
         with:
           sdk: nightly
 
@@ -19,5 +18,4 @@ jobs:
         with:
           target: Android32
           sdk: nightly
-          combine: false
           
