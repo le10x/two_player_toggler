@@ -22,16 +22,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Este paso instala el SDK para que CMake pueda encontrarlo
+      # Nombre correcto de la acción de setup
       - name: Setup Geode SDK
-        uses: geode-sdk/setup-geode@v3.0.0
+        uses: geode-sdk/setup@v1
         with:
           sdk: v5.5.0
 
       - name: Build Mod
-        uses: geode-sdk/build-geode-mod@main
+        uses: geode-sdk/build@v1
         with:
           target: ${{ matrix.config.target }}
-          sdk: v5.5.0
           combine: true
           
