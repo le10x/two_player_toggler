@@ -1,35 +1,16 @@
 name: Build Geode Mod
-
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
+on: [push, workflow_dispatch]
 
 jobs:
   build:
     strategy:
       fail-fast: false
       matrix:
-        config:
-          - name: Windows
-            os: windows-latest
-            target: win
-          - name: Android 64-bit
-            os: ubuntu-latest
-            target: android64
-          - name: Android 32-bit
-            os: ubuntu-latest
-            target: android32
-          - name: macOS
-            os: macos-latest
-            target: mac
-          - name: iOS
-            os: macos-latest
-            target: ios
+        # Usamos nombres simplificados sin puntos (evita matrix.config.target)
+        target: [win, android32, android64, mac, ios]
 
-    name: ${{ matrix.config.name }}
-    runs-on: ${{ matrix.config.os }}
+    # Determinamos el sistema operativo basado en el target
+    runs-on: ${{ (matrix.target == 'win' && 'windows-latest') || ((matrix.target == 'mac' || matrix.target == 'ios') && 'macos-latest') || 'ubuntu-latest' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -37,8 +18,8 @@ jobs:
       - name: Build Mod
         uses: geode-sdk/build-geode-mod@main
         with:
-          # Usamos la variable exacta de la matrix
-          target: ${{ matrix.config.target }}
+          # Referencia directa al valor de la lista
+          target: ${{ matrix.target }}
           sdk: nightly
           combine: true
           
