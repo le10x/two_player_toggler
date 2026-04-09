@@ -6,9 +6,9 @@ jobs:
     strategy:
       matrix:
         config:
-          - name: Android 32
+          - name: Android32
             os: ubuntu-latest
-            target: android32
+            target: Android32
 
     runs-on: ${{ matrix.config.os }}
 
