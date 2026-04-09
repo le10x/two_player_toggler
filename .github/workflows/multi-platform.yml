@@ -12,15 +12,15 @@ jobs:
       fail-fast: false
       matrix:
         config:
+          - name: Windows
+            os: windows-latest
+            target: win
           - name: Android 64-bit
             os: ubuntu-latest
             target: android64
           - name: Android 32-bit
             os: ubuntu-latest
             target: android32
-          - name: Windows
-            os: windows-latest
-            target: win
           - name: macOS
             os: macos-latest
             target: mac
@@ -37,6 +37,7 @@ jobs:
       - name: Build Mod
         uses: geode-sdk/build-geode-mod@main
         with:
+          # Usamos la variable exacta de la matrix
           target: ${{ matrix.config.target }}
           sdk: nightly
           combine: true
