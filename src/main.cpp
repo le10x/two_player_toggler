@@ -5,15 +5,14 @@ using namespace geode::prelude;
 
 class $modify(MyPauseLayer, PauseLayer) {
     void onMyButtonClick(CCObject* sender) {
-        FLAlertLayer::create("Geode", "¡Botón funcionando sin texturas!", "OK")->show();
+        FLAlertLayer::create("Geode", "Hello", "OK")->show();
     }
 
     bool init() {
         if (!PauseLayer::init()) return false;
 
-        // Usamos un sprite que ya existe en Geometry Dash (el círculo verde de Play)
         auto buttonSprite = CCSprite::createWithSpriteFrameName("GJ_playBtn_001.png");
-        buttonSprite->setScale(0.5f); // Lo hacemos más pequeño
+        buttonSprite->setScale(0.5f);
         
         auto myButton = CCMenuItemSpriteExtra::create(
             buttonSprite,
@@ -29,4 +28,3 @@ class $modify(MyPauseLayer, PauseLayer) {
 
         return true;
     }
-};
