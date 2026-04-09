@@ -1,3 +1,3 @@
-# Template Mod
+# Test Mod
 
-Edit about.md to change this
+This is a test mod.
