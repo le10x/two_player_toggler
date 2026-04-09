@@ -3,29 +3,22 @@ on: [push, workflow_dispatch]
 
 jobs:
   build:
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-          - name: Android32
-            os: ubuntu-latest
-            target: Android32
-
-    name: ${{ matrix.config.name }}
-    runs-on: ${{ matrix.config.os }}
+    name: Android 32 Build
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      # Este paso "instala" Geode en el servidor para que CMake lo vea
+      # Nombre oficial de la acción de instalación
       - name: Setup Geode
-        uses: geode-sdk/setup-geode@main
+        uses: geode-sdk/setup@v1
         with:
           sdk: v5.5.0
 
+      # Nombre oficial de la acción de compilación
       - name: Build Mod
-        uses: geode-sdk/build-geode-mod@main
+        uses: geode-sdk/build@v1
         with:
-          target: ${{ matrix.config.target }}
+          target: android32
           combine: true
           
