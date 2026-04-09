@@ -23,6 +23,6 @@ jobs:
           sdk: v5.5.0
           combine: true
         env:
-          # Esto fuerza a CMake a encontrar el SDK instalado
-          GEODE_SDK: ${{ github.workspace }}/geode-sdk
+          # Esta ruta es donde la Action de Geode suele descargar todo
+          GEODE_SDK: ${{ github.workspace }}/geode
           
