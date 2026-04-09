@@ -1,18 +1,25 @@
 name: Build Geode Mod
-on: [workflow_dispatch, push]
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
-    name: Build Android
+    name: Build Android 32-bit
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Build Mod
         uses: geode-sdk/build-geode-mod@main
         with:
-          # Ponemos el valor fijo sin variables de matriz
-          target: Android
+          # Especificamos Android32 explícitamente
+          target: Android32
           sdk: nightly
-          combine: true
+          # Quitamos 'combine: true' porque solo queremos 32 bits
           
