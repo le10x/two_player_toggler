@@ -3,14 +3,20 @@ on: [workflow_dispatch, push]
 
 jobs:
   build:
-    strategy:
-      matrix:
-        target: [Android32]
+    name: Build Android
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: geode-sdk/build-geode-mod@main
+
+      # ESTE ES EL PASO QUE FALTA PARA ARREGLAR TU ERROR:
+      - name: Setup Geode SDK
+        uses: geode-sdk/setup-geode@main
         with:
-          target: ${{ matrix.target }}
-          sdk: nightly
+          sdk: nightly # Necesario para la versión 2.2081
+
+      - name: Build Mod
+        uses: geode-sdk/build-geode-mod@main
+        with:
+          target: Android32
+          combine: true
           
