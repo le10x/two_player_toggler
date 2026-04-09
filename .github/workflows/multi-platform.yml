@@ -18,6 +18,12 @@ jobs:
           - name: Windows
             os: windows-latest
             target: win
+          - name: macOS
+            os: macos-latest
+            target: mac
+          - name: iOS
+            os: macos-latest
+            target: ios
 
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
