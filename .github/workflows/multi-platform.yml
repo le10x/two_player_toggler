@@ -12,14 +12,11 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - { name: Windows,  os: windows-latest, target: win }
-          - { name: Android64, os: ubuntu-latest,  target: android64 }
-          - { name: Android32, os: ubuntu-latest,  target: android32 }
-          - { name: macOS,    os: macos-latest,   target: mac }
-          - { name: iOS,      os: macos-latest,   target: ios }
+          - { name: Android64, target: android64 }
+          - { name: Android32, target: android32 }
 
     name: ${{ matrix.config.name }}
-    runs-on: ${{ matrix.config.os }}
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
