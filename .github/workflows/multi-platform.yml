@@ -12,9 +12,9 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - name: Android32
+          - name: Android 32
             os: ubuntu-latest
-            target: Android32
+            target: android32
 
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
@@ -22,15 +22,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Nombre correcto de la acción de setup
       - name: Setup Geode SDK
-        uses: geode-sdk/setup@v1
+        uses: geode-sdk/setup-geode@main
         with:
           sdk: v5.5.0
 
       - name: Build Mod
-        uses: geode-sdk/build@v1
+        uses: geode-sdk/build-geode-mod@main
         with:
           target: ${{ matrix.config.target }}
+          sdk: v5.5.0
           combine: true
           
