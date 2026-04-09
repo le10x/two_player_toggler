@@ -8,7 +8,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # ESTE ES EL PASO QUE FALTA PARA ARREGLAR TU ERROR:
       - name: Setup Geode SDK
         uses: geode-sdk/setup-geode@main
         with:
