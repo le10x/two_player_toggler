@@ -8,13 +8,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Geode SDK
-        uses: geode-sdk/setup-geode-sdk@main
-        with:
-          sdk: nightly
-
       - name: Build Mod
         uses: geode-sdk/build-geode-mod@main
         with:
-          target: Android32
+          # Al usar 'Android' (sin el 32), la acción moderna 
+          # instala automáticamente el SDK y compila para 32 y 64 bits.
+          target: Android
+          sdk: nightly
+          combine: true
           
