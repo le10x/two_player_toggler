@@ -1,49 +1,67 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/PauseLayer.hpp>
+#include <Geode/modify/PlayLayer.hpp>
 
 using namespace geode::prelude;
 
+// Variable global para recordar cómo era el nivel originalmente
+bool g_originalTwoPlayerState = false;
+
+class $modify(MyPlayLayer, PlayLayer) {
+    bool init(GJGameLevel* level, bool useReplay, bool dontSave) {
+        if (!PlayLayer::init(level, useReplay, dontSave)) return false;
+        // Guardamos el estado original apenas empieza el nivel
+        g_originalTwoPlayerState = m_levelSettings->m_twoPlayerMode;
+        return true;
+    }
+
+    void resetLevel() {
+        PlayLayer::resetLevel();
+        // Si la opción de Geode está activa, reseteamos al morir
+        if (Mod::get()->getSettingValue<bool>("reset-on-death")) {
+            m_levelSettings->m_twoPlayerMode = g_originalTwoPlayerState;
+        }
+    }
+
+    void onQuit() {
+        // Al salir, siempre devolvemos el nivel a su estado original
+        m_levelSettings->m_twoPlayerMode = g_originalTwoPlayerState;
+        PlayLayer::onQuit();
+    }
+};
+
 class $modify(MyPauseLayer, PauseLayer) {
-    
     void onToggleTwoPlayer(CCObject* sender) {
         auto levelSettings = PlayLayer::get()->m_levelSettings;
-        
-        // Alternamos el valor
-        levelSettings->m_twoPlayerMode = !levelSettings->m_twoPlayerMode;
-
-        // Actualizamos el texto del botón para que el usuario vea el cambio
-        auto btn = static_cast<ButtonSprite*>(static_cast<CCMenuItemSpriteExtra*>(sender)->getNormalImage());
-        std::string label = levelSettings->m_twoPlayerMode ? "2 Player: [X]" : "2 Player: [ ]";
-        btn->setString(label.c_str());
-        
-        // Mensaje rápido en pantalla
-        Notification::create(
-            levelSettings->m_twoPlayerMode ? "2 Player Mode Enabled" : "2 Player Mode Disabled",
-            NotificationIcon::Info
-        )->show();
+        // El toggler cambia de estado automáticamente, solo aplicamos al juego
+        auto toggler = static_cast<CCMenuItemToggler*>(sender);
+        levelSettings->m_twoPlayerMode = !toggler->isToggled();
     }
 
     bool init(bool unfocused) {
         if (!PauseLayer::init(unfocused)) return false;
 
-        if (!Mod::get()->getSettingValue<bool>("show-button")) return true;
-
         auto levelSettings = PlayLayer::get()->m_levelSettings;
 
-        // Texto dinámico dependiendo del estado actual
-        std::string labelText = levelSettings->m_twoPlayerMode ? "2 Player: [X]" : "2 Player: [ ]";
-
-        auto buttonSprite = ButtonSprite::create(labelText.c_str(), "goldFont.fnt", "GJ_button_04.png", 0.6f);
-        
-        auto myButton = CCMenuItemSpriteExtra::create(
-            buttonSprite,
+        // Creamos el Toggler (Checkmark verde oficial)
+        auto toggler = CCMenuItemToggler::createWithStandardSprites(
             this,
-            menu_selector(MyPauseLayer::onToggleTwoPlayer)
+            menu_selector(MyPauseLayer::onToggleTwoPlayer),
+            0.8f // Tamaño
         );
-        myButton->setID("two-player-toggle"_spr);
+        
+        // Lo ponemos en el estado actual del nivel
+        toggler->toggle(levelSettings->m_twoPlayerMode);
+        toggler->setID("two-player-toggle"_spr);
+
+        // Añadimos un texto pequeño al lado del check
+        auto label = CCLabelBMFont::create("2P", "bigFont.fnt");
+        label->setScale(0.4f);
+        label->setPosition({-20, 15}); // Ajusta según necesites
+        toggler->addChild(label);
 
         if (auto leftMenu = this->getChildByID("left-button-menu")) {
-            leftMenu->addChild(myButton);
+            leftMenu->addChild(toggler);
             leftMenu->updateLayout();
         }
 
