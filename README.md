@@ -1,4 +1,4 @@
-# 2 Player Toggler
+# 2-Player Toggler
 
 This mod adds a handy **2 player mode switch** directly to the Geometry Dash pause menu.
 
