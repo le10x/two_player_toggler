@@ -28,12 +28,16 @@ class $modify(MyPlayLayer, PlayLayer) {
 
 class $modify(MyPauseLayer, PauseLayer) {
     void onInfo(CCObject* sender) {
-        FLAlertLayer::create(
-            "2 Player Toggler",
-            "Use this switch to turn <cl>2 Player Mode</c> on or off.\n\n"
-            "<cy>Note:</c> The controls will be split across two sides of the screen.",
-            "OK"
-        )->show();
+        std::string message = "Use this switch to enable or disable <cl>2 Player Mode</c>.\n\n"
+                              "<cy>Note:</cy> Controls will be split on both sides of the screen.";
+
+        // Si la opción está activa, añadimos el estado original
+        if (Mod::get()->getSettingValue<bool>("show-original-status")) {
+            std::string status = g_originalTwoPlayerState ? "<cg>Enabled</c>" : "<cr>Disabled</c>";
+            message += "\n\nOriginal level state: " + status;
+        }
+
+        FLAlertLayer::create("2 Player Toggler", message, "OK")->show();
     }
 
     void onToggleTwoPlayer(CCObject* sender) {
@@ -53,7 +57,6 @@ class $modify(MyPauseLayer, PauseLayer) {
             container->setContentSize({45, 60});
             container->setID("two-player-group"_spr);
 
-            // Toggler un poco más grande (0.9f)
             auto toggler = CCMenuItemToggler::createWithStandardSprites(
                 this,
                 menu_selector(MyPauseLayer::onToggleTwoPlayer),
@@ -62,7 +65,6 @@ class $modify(MyPauseLayer, PauseLayer) {
             toggler->toggle(levelSettings->m_twoPlayerMode);
             toggler->setPosition({22, 22});
 
-            // Botón de Info un poco más abajo (posición Y bajada de 45 a 42)
             auto infoSprite = CCSprite::createWithSpriteFrameName("GJ_infoIcon_001.png");
             infoSprite->setScale(0.65f);
             
