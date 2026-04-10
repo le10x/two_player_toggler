@@ -28,16 +28,12 @@ class $modify(MyPlayLayer, PlayLayer) {
 
 class $modify(MyPauseLayer, PauseLayer) {
     void onInfo(CCObject* sender) {
-        std::string message = "Use this switch to enable or disable <cl>2 Player Mode</c>.\n\n"
-                              "<cy>Note:</cy> Controls will be split on both sides of the screen.";
-
-        // Si la opción está activa, añadimos el estado original
-        if (Mod::get()->getSettingValue<bool>("show-original-status")) {
-            std::string status = g_originalTwoPlayerState ? "<cg>Enabled</c>" : "<cr>Disabled</c>";
-            message += "\n\nOriginal level state: " + status;
-        }
-
-        FLAlertLayer::create("2 Player Toggler", message, "OK")->show();
+        FLAlertLayer::create(
+            "2 Player Toggler",
+            "Use this switch to enable or disable <cl>2 Player Mode</c>.\n\n"
+            "<cy>Note:</cy> Controls will be split on both sides of the screen.",
+            "OK"
+        )->show();
     }
 
     void onToggleTwoPlayer(CCObject* sender) {
