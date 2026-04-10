@@ -28,10 +28,11 @@ class $modify(MyPlayLayer, PlayLayer) {
 
 class $modify(MyPauseLayer, PauseLayer) {
     void onInfo(CCObject* sender) {
+        // Corrección del tag </cy> a </c> para que "Note:" sea amarillo
         FLAlertLayer::create(
             "2 Player Toggler",
             "Use this switch to enable or disable <cl>2 Player Mode</c>.\n\n"
-            "<cy>Note:</cy> Controls will be split on both sides of the screen.",
+            "<cy>Note:</c> Controls will be split on both sides of the screen.",
             "OK"
         )->show();
     }
@@ -46,42 +47,43 @@ class $modify(MyPauseLayer, PauseLayer) {
         if (!PauseLayer::init(unfocused)) return false;
 
         auto levelSettings = PlayLayer::get()->m_levelSettings;
-        auto leftMenu = this->getChildByID("left-button-menu");
+        auto winSize = CCDirector::get()->getWinSize();
 
-        if (leftMenu) {
-            auto container = CCNode::create();
-            container->setContentSize({45, 60});
-            container->setID("two-player-group"_spr);
+        // 1. Toggler (Check) - Escala 0.9f
+        auto toggler = CCMenuItemToggler::createWithStandardSprites(
+            this,
+            menu_selector(MyPauseLayer::onToggleTwoPlayer),
+            0.9f 
+        );
+        toggler->toggle(levelSettings->m_twoPlayerMode);
 
-            auto toggler = CCMenuItemToggler::createWithStandardSprites(
-                this,
-                menu_selector(MyPauseLayer::onToggleTwoPlayer),
-                0.9f 
-            );
-            toggler->toggle(levelSettings->m_twoPlayerMode);
-            toggler->setPosition({22, 22});
+        // 2. Botón de Info (Más grande: 0.8f)
+        auto infoSprite = CCSprite::createWithSpriteFrameName("GJ_infoIcon_001.png");
+        auto infoBtn = CCMenuItemSpriteExtra::create(
+            infoSprite,
+            this,
+            menu_selector(MyPauseLayer::onInfo)
+        );
+        infoBtn->setScale(0.8f);
+        infoBtn->setPosition({15, 25}); // Arriba del check
 
-            auto infoSprite = CCSprite::createWithSpriteFrameName("GJ_infoIcon_001.png");
-            infoSprite->setScale(0.65f);
-            
-            auto infoBtn = CCMenuItemSpriteExtra::create(
-                infoSprite,
-                this,
-                menu_selector(MyPauseLayer::onInfo)
-            );
-            // Ajustado un milímetro más abajo (de 42 a 41) y un poco más grande (de 0.65 a 0.7)
-            infoBtn->setScale(0.7f);
-            infoBtn->setPosition({38, 41}); 
+        // 3. Texto "2-Player Mode" a la derecha
+        auto label = CCLabelBMFont::create("2-Player Mode", "bigFont.fnt");
+        label->setScale(0.4f);
+        label->setAnchorPoint({0, 0.5}); // Alineado a la izquierda
+        label->setPosition({25, 0});
 
-            auto innerMenu = CCMenu::create();
-            innerMenu->setPosition({0, 0});
-            innerMenu->addChild(toggler);
-            innerMenu->addChild(infoBtn);
+        // 4. Menú contenedor posicionado en la esquina inferior izquierda
+        auto menu = CCMenu::create();
+        menu->addChild(toggler);
+        menu->addChild(infoBtn);
+        menu->addChild(label);
+        
+        // Posición: Esquina abajo a la izquierda (x:35, y:30 para que no toque los bordes)
+        menu->setPosition({35, 30});
+        menu->setID("two-player-menu"_spr);
 
-            container->addChild(innerMenu);
-            leftMenu->addChild(container);
-            leftMenu->updateLayout();
-        }
+        this->addChild(menu);
 
         return true;
     }
