@@ -8,7 +8,15 @@
 	},
 	"id": "user.test_mod",
 	"name": "Test Mod",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"developer": "User",
-	"description": "Test Mod"
-}
+	"description": "Custom comments button.",
+	"settings": {
+		"activate": {
+			"name": "Right Comment Button",
+			"description": "Move the comments button to the right.",
+			"type": "bool",
+			"default": true
+		}
+	}
+		}
