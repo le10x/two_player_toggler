@@ -7,15 +7,16 @@
 		"ios": "2.2081"
 	},
 	"id": "le10x.two_player_toggle",
-	"name": "2 PlayerToggler",
+	"name": "2 Player Toggler",
 	"version": "1.0.0",
 	"developer": "le10x",
-	"description": "Activate/Deactivate 2-player mode from pause.",
+	"description": "Toggle 2P mode.",
 	"settings": {
-		"show-button": {
-			"name": "Show Button",
+		"reset-on-death": {
+			"name": "Reset on Death",
+			"description": "Return to the original state of the level if you die.",
 			"type": "bool",
-			"default": true
+			"default": false
 		}
 	}
 }
