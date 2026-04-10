@@ -1,23 +1,11 @@
-# Template
-This is where she makes a mod.
+# 2 Player Toggler
 
-<img src="logo.png" width="150" alt="the mod's logo" />
+This mod adds a handy **2 player mode switch** directly to the Geometry Dash pause menu.
 
-*Update logo.png to change your mod's icon (please)*
+### Functions
+- **Toggle Button**: Switch between 1P and 2P modes without leaving the level.
+- **Options**: Option to reset the state upon death and automatic restoration upon exiting the level.
 
-## Getting started
-We recommend heading over to [the getting started section on our docs](https://docs.geode-sdk.org/getting-started/) for useful info on what to do next.
-
-## Build instructions
-For more info, see [our docs](https://docs.geode-sdk.org/getting-started/create-mod#build)
-```sh
-# Assuming you have the Geode CLI set up already
-geode build
-```
-
-# Resources
-* [Geode SDK Documentation](https://docs.geode-sdk.org/)
-* [Geode SDK Source Code](https://github.com/geode-sdk/geode/)
-* [Geode CLI](https://github.com/geode-sdk/cli)
-* [Bindings](https://github.com/geode-sdk/bindings/)
-* [Dev Tools](https://github.com/geode-sdk/DevTools)
+---
+### Credits
+Created by [le10x](https://github.com/le10x)
