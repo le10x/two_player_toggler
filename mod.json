@@ -6,8 +6,8 @@
 		"mac": "2.2081",
 		"ios": "2.2081"
 	},
-	"id": "le10x.two_player_toggle",
-	"name": "2 Player Toggler",
+	"id": "le10x.two_player_toggler",
+	"name": "2-Player Toggler",
 	"version": "1.3.0",
 	"developer": "le10x",
 	"description": "Toggle 2P mode with a green checkmark in the pause menu.",
