@@ -10,17 +10,12 @@
 	"name": "2 Player Toggler",
 	"version": "1.3.0",
 	"developer": "le10x",
-	"description": "Toggle 2P mode with a green checkmark.",
+	"description": "Toggle 2P mode with a green checkmark in the pause menu.",
+	"tags": ["gameplay", "utility", "interface", "cheat"],
 	"settings": {
 		"reset-on-death": {
 			"name": "Reset on Death",
-			"description": "Returns to the original state if you die.",
-			"type": "bool",
-			"default": false
-		},
-		"show-original-status": {
-			"name": "Show Original Status",
-			"description": "Shows if the level was originally 2P in the info box.",
+			"description": "Returns to the original level state if you die.",
 			"type": "bool",
 			"default": false
 		}
