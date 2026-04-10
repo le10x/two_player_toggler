@@ -27,11 +27,19 @@ class $modify(MyPlayLayer, PlayLayer) {
 };
 
 class $modify(MyPauseLayer, PauseLayer) {
+    // Función para el botón de información
+    void onInfo(CCObject* sender) {
+        FLAlertLayer::create(
+            "2 Player Toggler",
+            "Use this switch to turn <cl>2 Player Mode</c> on or off at this level.\n\n"
+            "<cy>Nota:</c> The controls will be split across two sides of the screen.",
+            "OK"
+        )->show();
+    }
+
     void onToggleTwoPlayer(CCObject* sender) {
         auto levelSettings = PlayLayer::get()->m_levelSettings;
         auto toggler = static_cast<CCMenuItemToggler*>(sender);
-        
-        // Corregimos la lógica: toggler->isToggled() devuelve el estado DESPUÉS del clic
         levelSettings->m_twoPlayerMode = !toggler->isToggled();
     }
 
@@ -42,33 +50,39 @@ class $modify(MyPauseLayer, PauseLayer) {
         auto leftMenu = this->getChildByID("left-button-menu");
 
         if (leftMenu) {
-            // 1. Toggler (Check) - Aumentamos escala a 0.8f para que no sea tan pequeño
+            // Creamos un nodo para agrupar el Toggler y el Info
+            auto container = CCNode::create();
+            container->setContentSize({40, 60});
+            container->setID("two-player-group"_spr);
+
+            // 1. Toggler (Check)
             auto toggler = CCMenuItemToggler::createWithStandardSprites(
                 this,
                 menu_selector(MyPauseLayer::onToggleTwoPlayer),
                 0.8f
             );
             toggler->toggle(levelSettings->m_twoPlayerMode);
-            toggler->setID("two-player-toggle"_spr);
+            toggler->setPosition({20, 20});
 
-            // 2. Texto "2P"
-            auto label = CCLabelBMFont::create("2P", "bigFont.fnt");
-            label->setScale(0.5f);
-
-            // 3. Contenedor especializado (CCMenu) 
-            // Usar CCMenu en lugar de CCNode hace que los clics funcionen siempre
-            auto menuContainer = CCMenu::create();
-            menuContainer->setLayout(RowLayout::create()->setGap(10.f)->setAutoScale(false));
+            // 2. Botón de Info (pequeño y arriba)
+            auto infoSprite = CCSprite::createWithSpriteFrameName("GJ_infoIcon_001.png");
+            infoSprite->setScale(0.6f);
             
-            // Importante: Definir un tamaño para que el menú sea "cliqueable"
-            menuContainer->setContentSize({80, 40});
-            menuContainer->setPosition({0, 0}); // Se posicionará mediante el layout del padre
+            auto infoBtn = CCMenuItemSpriteExtra::create(
+                infoSprite,
+                this,
+                menu_selector(MyPauseLayer::onInfo)
+            );
+            infoBtn->setPosition({35, 45}); // Posicionado arriba a la derecha del check
 
-            menuContainer->addChild(toggler);
-            menuContainer->addChild(label);
-            menuContainer->updateLayout();
+            // 3. Crear un menú interno para que detecte clics
+            auto innerMenu = CCMenu::create();
+            innerMenu->setPosition({0, 0});
+            innerMenu->addChild(toggler);
+            innerMenu->addChild(infoBtn);
 
-            leftMenu->addChild(menuContainer);
+            container->addChild(innerMenu);
+            leftMenu->addChild(container);
             leftMenu->updateLayout();
         }
 
