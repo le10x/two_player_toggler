@@ -4,28 +4,27 @@
 using namespace geode::prelude;
 
 class $modify(MyPauseLayer, PauseLayer) {
-    void onMyButtonClick(CCObject* sender) {
-        FLAlertLayer::create("Geode", "Hello", "OK")->show();
-    }
-
-    // Agregamos el parámetro 'bool unfocused' que pide el error
     bool init(bool unfocused) {
-        // Se lo pasamos a la función original
         if (!PauseLayer::init(unfocused)) return false;
 
-        auto buttonSprite = CCSprite::createWithSpriteFrameName("GJ_playBtn_001.png");
-        buttonSprite->setScale(0.5f);
-        
-        auto myButton = CCMenuItemSpriteExtra::create(
-            buttonSprite,
-            this,
-            menu_selector(MyPauseLayer::onMyButtonClick)
-        );
-    
-        if (auto leftMenu = this->getChildByID("left-button-menu")) {
-            myButton->setID("test-button"_spr);
-            leftMenu->addChild(myButton);
-            leftMenu->updateLayout(); 
+        // 1. Revisamos si la configuración está activa
+        bool isEnabled = Mod::get()->getSettingValue<bool>("activate");
+
+        if (isEnabled) {
+            // 2. Buscamos el botón de comentarios y los menús laterales
+            auto commentBtn = this->getChildByIDRecursive("comments-button");
+            auto leftMenu = this->getChildByID("left-button-menu");
+            auto rightMenu = this->getChildByID("right-button-menu");
+
+            if (commentBtn && leftMenu && rightMenu) {
+                // 3. Lo quitamos de la izquierda y lo pasamos a la derecha
+                commentBtn->removeFromParentAndCleanup(false);
+                rightMenu->addChild(commentBtn);
+                
+                // 4. Actualizamos ambos layouts para que no se amontonen
+                leftMenu->updateLayout();
+                rightMenu->updateLayout();
+            }
         }
 
         return true;
