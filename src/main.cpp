@@ -27,13 +27,11 @@ class $modify(MyPlayLayer, PlayLayer) {
 };
 
 class $modify(MyPauseLayer, PauseLayer) {
-    // Usamos customSetup en lugar de init para evitar el error de Windows
     void customSetup() {
         PauseLayer::customSetup();
         
         auto levelSettings = PlayLayer::get()->m_levelSettings;
 
-        // Toggler (Check)
         auto toggler = CCMenuItemToggler::createWithStandardSprites(
             this,
             menu_selector(MyPauseLayer::onToggleTwoPlayer),
@@ -41,7 +39,6 @@ class $modify(MyPauseLayer, PauseLayer) {
         );
         toggler->toggle(levelSettings->m_twoPlayerMode);
 
-        // Texto "2-Player Mode"
         auto label = CCLabelBMFont::create("2-Player Mode", "bigFont.fnt");
         label->setScale(0.3f);
         label->setAnchorPoint({0, 0.5});
@@ -51,7 +48,6 @@ class $modify(MyPauseLayer, PauseLayer) {
         menu->addChild(toggler);
         menu->addChild(label);
         
-        // Posición ajustada
         menu->setPosition({42, 37});
         menu->setID("two-player-menu"_spr);
 
@@ -59,8 +55,24 @@ class $modify(MyPauseLayer, PauseLayer) {
     }
 
     void onToggleTwoPlayer(CCObject* sender) {
-        auto levelSettings = PlayLayer::get()->m_levelSettings;
+        auto pl = PlayLayer::get();
+        if (!pl) return;
+
         auto toggler = static_cast<CCMenuItemToggler*>(sender);
-        levelSettings->m_twoPlayerMode = !toggler->isToggled();
+        bool newState = !toggler->isToggled();
+        
+        // Cambiamos el modo
+        pl->m_levelSettings->m_twoPlayerMode = newState;
+
+        // --- ARREGLO PARA MODO PLATAFORMA ---
+        // Esto le dice al juego que actualice la interfaz táctil
+        if (pl->m_isPlatformer) {
+            pl->updateUI(0); // Refresca elementos de la UI
+            // Intentamos forzar la actualización de los controles táctiles
+            if (auto layer = pl->getChildByID("UILayer")) {
+                // En Geode, esto refresca la visibilidad de los botones según el modo
+                pl->togglePlayerMode(newState, true); 
+            }
+        }
     }
 };
