@@ -8,4 +8,4 @@ This mod adds a handy **2 player mode switch** directly to the Geometry Dash pau
 
 ---
 ### Credits
-Created by [le10x](user:299013682)
+Created by [le10x](user:34287059)
