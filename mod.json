@@ -8,10 +8,11 @@
 	},
 	"id": "le10x.two_player_swapper",
 	"name": "2-Player Swapper",
-	"version": "1.0.0",
+	"version": "v1.0.0",
 	"developer": "le10x",
 	"description": "Toggle 2P mode with a button in the pause menu.",
-	"tags": ["gameplay", "utility", "interface", "cheat"],
+	"repository": "https://github.com/le10x/two_player_swapper",
+	"tags": ["gameplay", "utility", "interface"],
 	"settings": {
 		"reset-on-death": {
 			"name": "Reset on Death",
