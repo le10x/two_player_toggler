@@ -55,24 +55,8 @@ class $modify(MyPauseLayer, PauseLayer) {
     }
 
     void onToggleTwoPlayer(CCObject* sender) {
-        auto pl = PlayLayer::get();
-        if (!pl) return;
-
+        auto levelSettings = PlayLayer::get()->m_levelSettings;
         auto toggler = static_cast<CCMenuItemToggler*>(sender);
-        bool newState = !toggler->isToggled();
-        
-        // Cambiamos el modo
-        pl->m_levelSettings->m_twoPlayerMode = newState;
-
-        // --- ARREGLO PARA MODO PLATAFORMA ---
-        // Esto le dice al juego que actualice la interfaz táctil
-        if (pl->m_isPlatformer) {
-            pl->updateUI(0); // Refresca elementos de la UI
-            // Intentamos forzar la actualización de los controles táctiles
-            if (auto layer = pl->getChildByID("UILayer")) {
-                // En Geode, esto refresca la visibilidad de los botones según el modo
-                pl->togglePlayerMode(newState, true); 
-            }
-        }
+        levelSettings->m_twoPlayerMode = !toggler->isToggled();
     }
 };
