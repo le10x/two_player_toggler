@@ -1,6 +1,6 @@
 #include <Geode/Geode.hpp>
-#include <Geode/modify/PauseLayer.hpp>
 #include <Geode/modify/PlayLayer.hpp>
+#include <Geode/modify/PauseLayer.hpp>
 
 using namespace geode::prelude;
 
@@ -13,50 +13,31 @@ class $modify(MyPlayLayer, PlayLayer) {
         return true;
     }
 
-    void resetLevel() {
-        PlayLayer::resetLevel();
-        if (Mod::get()->getSettingValue<bool>("reset-on-death")) {
-            m_levelSettings->m_twoPlayerMode = g_originalTwoPlayerState;
+    // Usamos dispatchClick porque nos da la posición (x, y) del toque/mouse
+    void dispatchClick(bool push, int button, bool isPlayer1, CCPoint pos) {
+        bool split = Mod::get()->getSettingValue<bool>("split-controls");
+        bool invert = Mod::get()->getSettingValue<bool>("invert-split");
+
+        if (split && m_levelSettings->m_twoPlayerMode) {
+            // Obtenemos el ancho de la pantalla
+            float winWidth = CCDirector::sharedDirector()->getWinSize().width;
+            
+            // Determinamos si el toque fue en la mitad derecha (true) o izquierda (false)
+            bool isRightSide = pos.x > (winWidth / 2);
+
+            // Por defecto: Izquierda = P1, Derecha = P2
+            // Si invert es true: Izquierda = P2, Derecha = P1
+            bool targetIsPlayer1 = !isRightSide;
+            if (invert) targetIsPlayer1 = isRightSide;
+
+            // Llamamos a la función original forzando al jugador detectado
+            PlayLayer::dispatchClick(push, button, targetIsPlayer1, pos);
+        } else {
+            // Si la opción está apagada, comportamiento normal
+            PlayLayer::dispatchClick(push, button, isPlayer1, pos);
         }
     }
 
-    void onQuit() {
-        m_levelSettings->m_twoPlayerMode = g_originalTwoPlayerState;
-        PlayLayer::onQuit();
-    }
+    // Mantén tus funciones de resetLevel y onQuit aquí...
 };
-
-class $modify(MyPauseLayer, PauseLayer) {
-    void customSetup() {
-        PauseLayer::customSetup();
-        
-        auto levelSettings = PlayLayer::get()->m_levelSettings;
-
-        auto toggler = CCMenuItemToggler::createWithStandardSprites(
-            this,
-            menu_selector(MyPauseLayer::onToggleTwoPlayer),
-            0.67f 
-        );
-        toggler->toggle(levelSettings->m_twoPlayerMode);
-
-        auto label = CCLabelBMFont::create("2-Player Mode", "bigFont.fnt");
-        label->setScale(0.3f);
-        label->setAnchorPoint({0, 0.5});
-        label->setPosition({20, 0});
-
-        auto menu = CCMenu::create();
-        menu->addChild(toggler);
-        menu->addChild(label);
-        
-        menu->setPosition({42, 37});
-        menu->setID("two-player-menu"_spr);
-
-        this->addChild(menu);
-    }
-
-    void onToggleTwoPlayer(CCObject* sender) {
-        auto levelSettings = PlayLayer::get()->m_levelSettings;
-        auto toggler = static_cast<CCMenuItemToggler*>(sender);
-        levelSettings->m_twoPlayerMode = !toggler->isToggled();
-    }
-};
+    
