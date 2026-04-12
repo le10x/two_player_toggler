@@ -1,6 +1,8 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/PauseLayer.hpp>
+// Añadimos este para que reconozca la función base
+#include <Geode/modify/GJBaseGameLayer.hpp>
 
 using namespace geode::prelude;
 
@@ -13,31 +15,35 @@ class $modify(MyPlayLayer, PlayLayer) {
         return true;
     }
 
-    // Usamos dispatchClick porque nos da la posición (x, y) del toque/mouse
     void dispatchClick(bool push, int button, bool isPlayer1, CCPoint pos) {
         bool split = Mod::get()->getSettingValue<bool>("split-controls");
         bool invert = Mod::get()->getSettingValue<bool>("invert-split");
 
         if (split && m_levelSettings->m_twoPlayerMode) {
-            // Obtenemos el ancho de la pantalla
             float winWidth = CCDirector::sharedDirector()->getWinSize().width;
-            
-            // Determinamos si el toque fue en la mitad derecha (true) o izquierda (false)
             bool isRightSide = pos.x > (winWidth / 2);
 
-            // Por defecto: Izquierda = P1, Derecha = P2
-            // Si invert es true: Izquierda = P2, Derecha = P1
             bool targetIsPlayer1 = !isRightSide;
             if (invert) targetIsPlayer1 = isRightSide;
 
-            // Llamamos a la función original forzando al jugador detectado
-            PlayLayer::dispatchClick(push, button, targetIsPlayer1, pos);
+            // Cambiamos PlayLayer:: por GJBaseGameLayer::
+            GJBaseGameLayer::dispatchClick(push, button, targetIsPlayer1, pos);
         } else {
-            // Si la opción está apagada, comportamiento normal
-            PlayLayer::dispatchClick(push, button, isPlayer1, pos);
+            GJBaseGameLayer::dispatchClick(push, button, isPlayer1, pos);
         }
     }
 
-    // Mantén tus funciones de resetLevel y onQuit aquí...
+    void resetLevel() {
+        PlayLayer::resetLevel();
+        if (Mod::get()->getSettingValue<bool>("reset-on-death")) {
+            m_levelSettings->m_twoPlayerMode = g_originalTwoPlayerState;
+        }
+    }
+
+    void onQuit() {
+        m_levelSettings->m_twoPlayerMode = g_originalTwoPlayerState;
+        PlayLayer::onQuit();
+    }
 };
-    
+
+// ... (El resto de tu MyPauseLayer se mantiene igual)
